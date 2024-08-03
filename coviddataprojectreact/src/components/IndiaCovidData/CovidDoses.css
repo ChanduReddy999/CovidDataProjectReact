@@ -1,0 +1,64 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.dosesMain{
+    background-color: aliceblue;
+    padding-top: 50px;
+}
+
+.dosesOne{
+    background-color: antiquewhite;
+    text-align: center;
+}
+
+.dosesHeading{
+    background-color: aqua;
+}
+
+.dosesTwo{
+    background-color: aquamarine;
+}
+
+.dosesTwoUl{
+    list-style: none;
+}
+
+.dosesDataMain{
+    background-color: azure;
+    margin-top: 20px;
+}
+
+.dosesDataFirst{
+    background-color: beige;
+    display: flex;
+}
+
+.dosesDataFirst div{
+    margin-left: 20px;
+    width: 280px;
+    height: 100px;
+    /* font-size: 16px; */
+    text-align: center;
+    font-weight: 900;
+}
+
+
+
+/* 
+.dosesDataSecond{
+    background-color: bisque;
+    display: flex;
+}
+
+.dosesDataThird{
+    background-color: rgb(215, 205, 255);
+    display: flex;
+}
+
+.dosesDataFourth{
+    background-color: blue;
+    display: flex;
+} */

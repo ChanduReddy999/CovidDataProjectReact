@@ -1,0 +1,22 @@
+.navBar{
+    position: fixed;
+    height: 40px;
+    background-color: antiquewhite;
+    width: 100%;
+}
+
+.navBarUl{
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+}
+
+.navBarUlLi{
+    list-style: none;
+    font-weight: 600;
+    font-size: large;
+    padding-top: 10px;
+}
+.navBarUlLiLink{
+    text-decoration: none;
+}

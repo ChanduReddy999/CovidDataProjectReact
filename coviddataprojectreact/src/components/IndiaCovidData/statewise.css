@@ -1,0 +1,67 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Times New Roman', Times, serif;
+}
+.stateWiseMain{
+    margin: 0 100px;
+    padding-top: 50px;
+}
+
+.headingStateWise{
+    background-color: aliceblue;
+    color: blueviolet;
+    font-size: 40px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.second{
+    background-color: aliceblue;
+    padding: 10px;
+}
+.tableStructure{
+    border: 2px solid greenyellow;
+    border-radius: 10px;
+    display: block;
+}
+.tableHead{
+    background-color: antiquewhite;
+}
+
+.headingNames{
+    color: rgb(173, 200, 37);
+    font-size: 20px;
+    width: 180px;
+    height: 30px;
+}
+.headingNames:hover{
+    background-color: azure;
+    color: rgb(25, 164, 192);
+    font-size: 24px;
+}
+
+.tableBody{
+    background-color:rgb(191, 235, 244);
+}
+
+.tableData{
+    color: rgb(147, 9, 9);
+    font-size: 16px;
+    width: 180px;
+    height: 30px;
+    text-align: center;
+}
+
+.tableData:hover{
+    color: rgb(71, 61, 189);
+    background-color: rgb(150, 199, 242);
+    font-size: large;
+    font-weight: bold;
+}
+tr:hover{
+    background-color: aqua;
+    color: rgb(71, 61, 189);
+    font-size: large;
+    font-weight: bold;
+}
