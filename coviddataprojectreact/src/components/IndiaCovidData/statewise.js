@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
-import NavBar from '../IndiaCovidData/NavBar';
+import NavBar from '../NavBar';
 import './statewise.css'
 
 const StateWise = () => {

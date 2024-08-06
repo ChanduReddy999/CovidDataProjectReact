@@ -11,6 +11,8 @@ const NavBar = () => {
             <li className='navBarUlLi'><Link className='navBarUlLiLink' to="/">Home</Link></li>
             <li className='navBarUlLi'><Link className='navBarUlLiLink' to="/statewise">StateWise</Link></li>
             <li className='navBarUlLi'><Link className='navBarUlLiLink' to="/daywisecoviddoses">DayWiseData</Link></li>
+            <li className='navBarUlLi'><Link className='navBarUlLiLink' to="/covid">CovidAffect</Link></li>
+            <li className='navBarUlLi'><Link className='navBarUlLiLink' to="/covidvaccine">CovidVaccine</Link></li>
         </ul>
       </nav>
     </>

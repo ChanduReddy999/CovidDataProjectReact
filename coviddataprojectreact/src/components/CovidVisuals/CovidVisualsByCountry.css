@@ -1,0 +1,39 @@
+.NavBarDivForWorldMapPage {
+  position: fixed;
+  top: 0;
+}
+
+.globeMain {
+  margin-top: 50px;
+  width: 500px;
+  height: 200px;
+}
+
+.ShowData {
+  width: 300px;
+  position: absolute;
+  top: 70px;
+  left: 30px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+.FlagImageDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.flagImage {
+  width: 200px;
+  height: 200px;
+}
+
+.ShowTotalData {
+  width: 300px;
+  position: absolute;
+  top: 250px;
+  left: 900px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
