@@ -46,7 +46,7 @@ const Covid = () => {
                 <div><h1 className='headingOne'>LIVE</h1></div>    
                 </div>
                     <h2 className='headingTwo'>Covid-19 Live Tracker</h2>
-                    <marquee className="desclaimer">!Desclaimer: This content / information is last updated on {data.lastupdatedtime}</marquee>
+                    <p className="desclaimer">!Desclaimer: This content / information is last updated on {data.lastupdatedtime}</p>
                 </div>
                 <div className='second'>
                     <ul className='ulTag'>
