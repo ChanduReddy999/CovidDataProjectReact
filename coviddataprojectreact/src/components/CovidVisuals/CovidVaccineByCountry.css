@@ -27,3 +27,13 @@
   width: 200px;
   height: 200px;
 }
+
+.ShowOverAllVaccineData{
+  width: 300px;
+  position: absolute;
+  top: 250px;
+  left: 900px;
+  background-color: white;
+  padding: 10px;
+  border-radius: 5px;
+}

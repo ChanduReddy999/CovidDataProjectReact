@@ -4,13 +4,16 @@ import Globe from 'react-globe.gl';
 import * as topojson from 'topojson-client';
 import NavBar from '../NavBar';
 import './CovidVaccineByCountry.css';
-import countryNameJson from './countries.json'
+import vaccineCountries from './vaccineCountries.json'
 
 
-const CovidVaccineByCountry = () => {
+const CovidVisualsByCountry = () => {
     const globeEl = useRef();
     const [countries, setCountries] = useState({ features: [] });
     const [countryData, setCountryData] = useState(null);
+
+    const [hoveredCountry, setHoveredCountry] = useState(null);
+    const [clickedCountry, setClickedCountry] = useState(null);
 
     useEffect(() => {
         // Load country polygons from a TopoJSON file
@@ -43,6 +46,7 @@ const CovidVaccineByCountry = () => {
         console.log("handlecountryName", countryName);
 
         fetchCountryData(countryName);
+        setClickedCountry(country);
     };
 
     const fetchCountryData = async (countryName) => {
@@ -62,37 +66,71 @@ const CovidVaccineByCountry = () => {
     };
 
     const getMockCountryData = async (countryName) => {
-        // console.log("countryName", countryName);
-        const countryCode = countryNameJson[countryName];
-        console.log("countryCode", countryCode);
-
-        if (!countryCode) {
-            console.error("Country code not found for:", countryName);
-            return {};
-        }
-
-        const CovidVisualData = async (countryCode) => {
-            try {
-                const response = await axios.post('https://coviddataproject.onrender.com/prod/v1/covidvaccinedata', { countryCode });
-                const result = response.data;
-                const apiData = result.data || {};
-                console.log("apiData", apiData);
-
-                return apiData;
-            } catch (error) {
-                console.error("Error Fetching Data for Particular Day", error);
-                throw error;
+        try {
+            const OriginalCountryName = countryName
+            console.log("oldName", OriginalCountryName);
+            countryName = vaccineCountries[countryName];
+            console.log("newCountryName", countryName);
+            if (!countryName) {
+                countryName = OriginalCountryName
             }
-        };
+            const response = await axios.post('https://coviddataproject.onrender.com/prod/v1/covidvaccinecountrydata', { countryName });
+            const result = response.data;
+            const apiData = result.data || {};
+            console.log("apiData", apiData);
 
-        return CovidVisualData(countryCode);
+            return apiData;
+        } catch (error) {
+            console.error("Error Fetching Data for Particular Country", error);
+            throw error;
+        }
     };
+
+    useEffect(() => {
+        if (globeEl.current) {
+            globeEl.current.pointOfView({ altitude: 2.5 });
+        }
+    }, []);
+
+    const handleCountryHover = (country) => {
+        setHoveredCountry(country);
+    };
+
+    const getPolygonCapColor = (country) => {
+        if (clickedCountry && country.properties.name === clickedCountry.properties.name) {
+            return '#ff0000';
+        }
+        if (hoveredCountry && country.properties.name === hoveredCountry.properties.name) {
+            return '#00ff00';
+        }
+        return '#2cabea';
+    };
+
+    // for overall vaccine data worldwide we used this function
+
+    const [overAllData, setOveralldata] = useState([])
+    useEffect(() => {
+        getOverAllCovidViccineData();
+    }, [])
+    const getOverAllCovidViccineData = async () => {
+        try {
+            await axios.get("https://coviddataproject.onrender.com/prod/v1/covidvaccinedata").then(response => {
+                const overAllVaccineData = response.data
+                console.log("overalldatavaccine",overAllVaccineData.data);
+                setOveralldata(overAllVaccineData.data)
+            }).catch(error => {
+                console.error("Error while fecthing data ", error);
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
     return (
         <>
             <div className='NavBarDivForWorldMapPage'>
-            <NavBar />
+                <NavBar />
             </div>
             <div className='globeMain'>
                 <Globe
@@ -100,38 +138,43 @@ const CovidVaccineByCountry = () => {
                     globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
                     backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
                     polygonsData={countries.features}
-                    polygonCapColor={() => '#2cabea'}
+                    polygonCapColor={getPolygonCapColor}
                     polygonSideColor={() => '#ea2cab'}
                     polygonStrokeColor={() => '#5804e9'}
                     onPolygonClick={handleCountryClick}
+                    onPolygonHover={handleCountryHover}
                 />
+
                 {countryData && (
                     <div className='ShowData'>
                         <h2>Country Data</h2>
                         <p>Name: {countryData.name}</p>
                         <div className='FlagImageDiv'>
-                        <img src={countryData.flag} className='flagImage' alt='countryFlag' />
+                            <img src={countryData.flag} className='flagImage' alt='countryFlag' />
                         </div>
-                        <p>Cases: {countryData.cases}</p>
-                        <p>CasesPerOneMillion: {countryData.casesPerOneMillion}</p>
-                        <p>deaths: {countryData.deaths}</p>
-                        <p>deathsPerOneMillion: {countryData.deathsPerOneMillion}</p>
-                        <p>deltaCases: {countryData.deltaCases}</p>
-                        <p>deltaDeaths: {countryData.deltaDeaths}</p>
-                        <p>deltaRecovered: {countryData.deltaRecovered}</p>
-                        <p>deltaVaccinated: {countryData.deltaVaccinated}</p>
-                        <p>population: {countryData.population}</p>
-                        <p>recovered: {countryData.recovered}</p>
-                        <p>reports: {countryData.reports}</p>
-                        <p>testsPerOneMillion: {countryData.testsPerOneMillion}</p>
-                        <p>totalTests: {countryData.totalTests}</p>
+                        <p>Population: {countryData.population}</p>
+                        <p>Vaccinated: {countryData.vaccinated}</p>
+                        <p>FullyVaccinated: {countryData.fullyVaccinated}</p>
+                        <p>VaccinatedPerHundred: {countryData.vaccinatedPerHundred}</p>
+                        <p>DeltaVaccinated: {countryData.deltaVaccinated}</p>
+                        <p>Doses: {countryData.doses}</p>
+                        <p>Latitude: {countryData.lat}</p>
+                        <p>Longitude: {countryData.lng}</p>
                     </div>
                 )}
+                <div className='ShowOverAllVaccineData'>
+                    <p>population:{overAllData.population}</p>
+                    <p>vaccinated:{overAllData.vaccinated}</p>
+                    <p>fullyVaccinated:{overAllData.fullyVaccinated}</p>
+                    <p>vaccinatedPerHundred:{overAllData.vaccinatedPerHundred}</p>
+                    <p>deltaVaccinated:{overAllData.deltaVaccinated}</p>
+                    <p>doses:{overAllData.doses}</p>
+                </div>
             </div>
         </>
     );
 }
 
-export default CovidVaccineByCountry
+export default CovidVisualsByCountry
 
 

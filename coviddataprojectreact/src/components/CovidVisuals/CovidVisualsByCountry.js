@@ -102,7 +102,7 @@ const CovidVisualsByCountry = () => {
 
                 return apiData;
             } catch (error) {
-                console.error("Error Fetching Data for Particular Day", error);
+                console.error("Error Fetching Data for Particular Country", error);
                 throw error;
             }
         };
@@ -112,30 +112,52 @@ const CovidVisualsByCountry = () => {
 
     useEffect(() => {
         if (globeEl.current) {
-          globeEl.current.pointOfView({ altitude: 2.5 });
+            globeEl.current.pointOfView({ altitude: 2.5 });
         }
-      }, []);
-    
-      const handleCountryHover = (country) => {
+    }, []);
+
+    const handleCountryHover = (country) => {
         setHoveredCountry(country);
-      };
-    
-    
-      const getPolygonCapColor = (country) => {
+    };
+
+
+    const getPolygonCapColor = (country) => {
         if (clickedCountry && country.properties.name === clickedCountry.properties.name) {
-          return '#ff0000'; 
+            return '#ff0000';
         }
         if (hoveredCountry && country.properties.name === hoveredCountry.properties.name) {
-          return '#00ff00'; 
+            return '#00ff00';
         }
         return '#2cabea';
-      };
-    
+    };
+
+
+    // for overall covid affect data worldwide we used this function
+
+    const [overAllData, setOveralldata] = useState([])
+    useEffect(() => {
+        getOverAllCovidVisualData();
+    }, [])
+    const getOverAllCovidVisualData = async () => {
+        try {
+            await axios.get("https://coviddataproject.onrender.com/prod/v1/covidvisualdata").then(response => {
+                const overAllVisualData = response.data
+                console.log("overalldatavaccine", overAllVisualData.data);
+                setOveralldata(overAllVisualData.data)
+            }).catch(error => {
+                console.error("Error while fecthing data ", error);
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
 
     return (
         <>
             <div className='NavBarDivForWorldMapPage'>
-            <NavBar />
+                <NavBar />
             </div>
             <div className='globeMain'>
                 <Globe
@@ -148,14 +170,14 @@ const CovidVisualsByCountry = () => {
                     polygonStrokeColor={() => '#5804e9'}
                     onPolygonClick={handleCountryClick}
                     onPolygonHover={handleCountryHover}
-                    
+
                 />
                 {countryData && (
                     <div className='ShowData'>
                         <h2>Country Data</h2>
                         <p>Name: {countryData.name}</p>
                         <div className='FlagImageDiv'>
-                        <img src={countryData.flag} className='flagImage' alt='countryFlag' />
+                            <img src={countryData.flag} className='flagImage' alt='countryFlag' />
                         </div>
                         <p>Cases: {countryData.cases}</p>
                         <p>CasesPerOneMillion: {countryData.casesPerOneMillion}</p>
@@ -174,11 +196,10 @@ const CovidVisualsByCountry = () => {
                 )}
                 <div className='ShowTotalData'>
                     <p>TOTAL COUNTS (as of a minute ago)</p>
-                    <p>ACTIVE: 22,123,398 /704,753,890</p>
-                    <p> DEATHS: 7,010,681  (0.99%)</p>
-                    <p>RECOVERIES: 675,619,811  (95.87%)</p>
-                    <p> VACCINATED: 5,631,263,632  (72.20%)</p>
-                    <p>update the live data from same api</p>
+                    <p>ACTIVE: 22,123,398 / {overAllData.reports}</p>
+                    <p> DEATHS: (0.99%) {overAllData.deaths}</p>
+                    <p>RECOVERIES: (95.87%) {overAllData.recovered}</p>
+                    <p> VACCINATED: (72.20%) {overAllData.vaccinated}</p>
                 </div>
             </div>
         </>
